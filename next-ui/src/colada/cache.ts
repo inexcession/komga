@@ -110,7 +110,8 @@ export function clearReadList(readListId: string) {
 }
 
 export function clearAllCollections() {
-  void entitiesChanged(QUERY_KEYS_READLIST.root)
+  void entitiesChanged(QUERY_KEYS_COLLECTIONS.root)
+  clearAllSeries()
 }
 
 export function clearCollection(collectionId: string) {
