@@ -64,39 +64,24 @@ describe('colada cache', () => {
     expect(predicate!(makeEntry({ content: [{ id: 'series-2' }] }))).toBe(true)
 
     // matches inline collection containing seriesId in standard page
-    expect(
-      predicate!(
-        makeEntry({
-          content: [
-            { id: 'series-1' },
-            { id: 'col-1', seriesIds: ['series-2', 'series-3'] },
-          ],
-        }),
-      ),
-    ).toBe(true)
+    const pageWithCollection = makeEntry({
+      content: [{ id: 'series-1' }, { id: 'col-1', seriesIds: ['series-2', 'series-3'] }],
+    })
+    expect(predicate!(pageWithCollection)).toBe(true)
 
     // matches inline collection containing seriesId in infinite page
-    expect(
-      predicate!(
-        makeEntry({
-          pages: [
-            { content: [{ id: 'series-1' }] },
-            { content: [{ id: 'col-1', seriesIds: ['series-2'] }] },
-          ],
-        }),
-      ),
-    ).toBe(true)
+    const infiniteWithCollection = makeEntry({
+      pages: [
+        { content: [{ id: 'series-1' }] },
+        { content: [{ id: 'col-1', seriesIds: ['series-2'] }] },
+      ],
+    })
+    expect(predicate!(infiniteWithCollection)).toBe(true)
 
     // does not match unrelated page
-    expect(
-      predicate!(
-        makeEntry({
-          content: [
-            { id: 'series-1' },
-            { id: 'col-1', seriesIds: ['series-3'] },
-          ],
-        }),
-      ),
-    ).toBe(false)
+    const unrelatedPage = makeEntry({
+      content: [{ id: 'series-1' }, { id: 'col-1', seriesIds: ['series-3'] }],
+    })
+    expect(predicate!(unrelatedPage)).toBe(false)
   })
 })

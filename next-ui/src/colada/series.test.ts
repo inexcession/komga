@@ -6,11 +6,7 @@ import { mockCollection1 } from '@/mocks/api/handlers/collections'
 describe('unwrapGroupedPage', () => {
   test('unwraps series and collections in order while preserving page metadata', () => {
     const unwrapped = unwrapGroupedPage({
-      content: [
-        { series: mockSeries1 },
-        { collection: mockCollection1 },
-        {},
-      ],
+      content: [{ series: mockSeries1 }, { collection: mockCollection1 }, {}],
       totalElements: 2,
       totalPages: 1,
       first: true,
