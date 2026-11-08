@@ -1331,6 +1331,10 @@
     "defaultMessage": "Fill poster containers",
     "description": "User menu: stretch posters"
   },
+  "PgTNJn": {
+    "defaultMessage": "Hide series in collections",
+    "description": "User menu: hide series that belong to a collection"
+  },
   "PguYSD": {
     "defaultMessage": "Overwrite existing read list",
     "description": "Import reading list: bottom bar: reading list overwrite checkbox label"
