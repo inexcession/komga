@@ -193,8 +193,7 @@ const conds = computed(() => ({
   allOf: [
     valuesToConditions(libraryIds.value, 'libraryId'),
     ...filtersToConditions(filters),
-    appStore.hideCollectedSeries ? { collectionId: { operator: 'isNull' } } : null,
-  ].filter(Boolean) as SearchConditionSeries[],
+  ] as SearchConditionSeries[],
 }))
 
 // clear selection if filter or paging changes

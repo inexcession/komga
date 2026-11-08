@@ -892,7 +892,7 @@ export type SearchConditionAuthor = {
 export type SearchConditionBook = SearchConditionAnyOfBook | SearchConditionAllOfBook | SearchConditionLibraryId | SearchConditionReadListId | SearchConditionSeriesId | SearchConditionDeleted | SearchConditionOneShot | SearchConditionTitle | SearchConditionReleaseDate | SearchConditionTag | SearchConditionNumberSort | SearchConditionReadStatus | SearchConditionMediaStatus | SearchConditionMediaProfile | SearchConditionAuthor | SearchConditionNotableEntity | SearchConditionPoster;
 
 export type SearchConditionCollectionId = {
-    collectionId: SearchOperatorEqualityNullableString;
+    collectionId: SearchOperatorEqualityString;
 };
 
 export type SearchConditionComplete = {
@@ -1840,6 +1840,10 @@ export type GetBookByIdErrors = {
      * Bad Request
      */
     400: ValidationErrorResponse;
+    /**
+     * Not Found
+     */
+    404: unknown;
 };
 
 export type GetBookByIdError = GetBookByIdErrors[keyof GetBookByIdErrors];
@@ -4640,6 +4644,10 @@ export type GetSeriesByIdErrors = {
      * Bad Request
      */
     400: ValidationErrorResponse;
+    /**
+     * Not Found
+     */
+    404: unknown;
 };
 
 export type GetSeriesByIdError = GetSeriesByIdErrors[keyof GetSeriesByIdErrors];

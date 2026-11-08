@@ -490,6 +490,10 @@ export const vSearchOperatorEqualityString = v.intersect([v.union([vSearchOperat
         operator: v.string()
     })]);
 
+export const vSearchConditionCollectionId = v.object({
+    collectionId: vSearchOperatorEqualityString
+});
+
 export const vSearchConditionLanguage = v.object({
     language: vSearchOperatorEqualityString
 });
@@ -2982,10 +2986,6 @@ export const vSearchConditionBook: v.GenericSchema = v.union([
     vSearchConditionNotableEntity,
     vSearchConditionPoster
 ]);
-
-export const vSearchConditionCollectionId: v.GenericSchema = v.object({
-    collectionId: v.lazy(() => vSearchOperatorEqualityNullableString)
-});
 
 export const vSearchConditionComplete: v.GenericSchema = v.object({
     complete: v.lazy(() => vSearchOperatorBoolean)
