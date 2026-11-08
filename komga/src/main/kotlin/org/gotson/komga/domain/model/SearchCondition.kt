@@ -62,7 +62,7 @@ class SearchCondition {
   @Schema(name = "SearchConditionCollectionId")
   data class CollectionId(
     @JsonProperty("collectionId")
-    val operator: SearchOperator.EqualityNullable<String>,
+    val operator: SearchOperator.Equality<String>,
   ) : Series
 
   @Schema(name = "SearchConditionReadListId")

@@ -208,12 +208,7 @@ class SeriesSearchHelper(
 
       is SearchCondition.AgeRating -> searchCondition.operator.toCondition(Tables.SERIES_METADATA.AGE_RATING) to setOf(RequiredJoin.SeriesMetadata)
 
-      is SearchCondition.CollectionId -> {
-        val innerAny = {
-          DSL
-            .select(Tables.COLLECTION_SERIES.SERIES_ID)
-            .from(Tables.COLLECTION_SERIES)
-        }
+      is SearchCondition.CollectionId ->
         when (searchCondition.operator) {
           // for IS condition we have to do a join, so as to order the series by collection number
           is SearchOperator.Is ->
@@ -230,12 +225,7 @@ class SeriesSearchHelper(
             }
             Tables.SERIES.ID.notIn(inner(searchCondition.operator.value)) to emptySet()
           }
-
-          is SearchOperator.IsNullT<*> -> Tables.SERIES.ID.notIn(innerAny()) to emptySet()
-
-          is SearchOperator.IsNotNullT<*> -> Tables.SERIES.ID.`in`(innerAny()) to emptySet()
         }
-      }
 
       is SearchCondition.Complete ->
         Tables.SERIES_METADATA.TOTAL_BOOK_COUNT.let { field ->
