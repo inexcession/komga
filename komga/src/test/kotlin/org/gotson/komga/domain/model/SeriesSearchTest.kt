@@ -32,6 +32,8 @@ class SeriesSearchTest(
           ),
           SearchCondition.CollectionId(SearchOperator.Is("collection1")),
           SearchCondition.CollectionId(SearchOperator.IsNot("collection1")),
+          SearchCondition.CollectionId(SearchOperator.IsNullT()),
+          SearchCondition.CollectionId(SearchOperator.IsNotNullT()),
           SearchCondition.Deleted(SearchOperator.IsFalse),
           SearchCondition.Deleted(SearchOperator.IsTrue),
           SearchCondition.Complete(SearchOperator.IsTrue),

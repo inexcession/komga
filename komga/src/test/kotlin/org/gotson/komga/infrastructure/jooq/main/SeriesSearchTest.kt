@@ -188,6 +188,24 @@ class SeriesSearchTest(
       assertThat(found.map { it.name }).containsExactlyInAnyOrder("2")
       assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("2")
     }
+
+    run {
+      val search = SeriesSearch(SearchCondition.CollectionId(SearchOperator.IsNullT()))
+      val found = seriesDao.findAll(search.condition, SearchContext(user1), Pageable.unpaged()).content
+      val foundDto = seriesDtoDao.findAll(search, SearchContext(user1), Pageable.unpaged()).content
+
+      assertThat(found.map { it.name }).containsExactlyInAnyOrder("2")
+      assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("2")
+    }
+
+    run {
+      val search = SeriesSearch(SearchCondition.CollectionId(SearchOperator.IsNotNullT()))
+      val found = seriesDao.findAll(search.condition, SearchContext(user1), Pageable.unpaged()).content
+      val foundDto = seriesDtoDao.findAll(search, SearchContext(user1), Pageable.unpaged()).content
+
+      assertThat(found.map { it.name }).containsExactlyInAnyOrder("1")
+      assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("1")
+    }
   }
 
   @Test
@@ -195,6 +213,7 @@ class SeriesSearchTest(
     val series1 = makeSeries("1", library1.id).also { seriesLifecycle.createSeries(it) }
     val series2 = makeSeries("2", library1.id).also { seriesLifecycle.createSeries(it) }
     val series3 = makeSeries("3", library1.id).also { seriesLifecycle.createSeries(it) }
+    makeSeries("4", library1.id).also { seriesLifecycle.createSeries(it) }
     val collection1 = SeriesCollection("col1", seriesIds = listOf(series1.id, series2.id, series3.id), ordered = true)
     val collection2 = SeriesCollection("col2", seriesIds = listOf(series3.id, series2.id, series1.id), ordered = true)
     collectionRepository.insert(collection1)
@@ -232,6 +251,24 @@ class SeriesSearchTest(
         )
       val found = seriesDao.findAll(search.condition, SearchContext(user1), UnpagedSorted(Sort.by("collection.number"))).content
       val foundDto = seriesDtoDao.findAll(search, SearchContext(user1), UnpagedSorted(Sort.by("collection.number"))).content
+
+      assertThat(found.map { it.name }).containsExactlyInAnyOrder("1", "2", "3")
+      assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("1", "2", "3")
+    }
+
+    run {
+      val search = SeriesSearch(SearchCondition.CollectionId(SearchOperator.IsNullT()))
+      val found = seriesDao.findAll(search.condition, SearchContext(user1), Pageable.unpaged()).content
+      val foundDto = seriesDtoDao.findAll(search, SearchContext(user1), Pageable.unpaged()).content
+
+      assertThat(found.map { it.name }).containsExactlyInAnyOrder("4")
+      assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("4")
+    }
+
+    run {
+      val search = SeriesSearch(SearchCondition.CollectionId(SearchOperator.IsNotNullT()))
+      val found = seriesDao.findAll(search.condition, SearchContext(user1), Pageable.unpaged()).content
+      val foundDto = seriesDtoDao.findAll(search, SearchContext(user1), Pageable.unpaged()).content
 
       assertThat(found.map { it.name }).containsExactlyInAnyOrder("1", "2", "3")
       assertThat(foundDto.map { it.name }).containsExactlyInAnyOrder("1", "2", "3")
