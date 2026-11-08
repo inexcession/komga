@@ -16,6 +16,15 @@ interface SeriesCollectionRepository {
   ): SeriesCollection?
 
   /**
+   * Find all SeriesCollection by [collectionIds],
+   * seriesId will be filtered by the provided [context] libraries.
+   */
+  fun findByIds(
+    collectionIds: Collection<String>,
+    context: SearchContext,
+  ): Collection<SeriesCollection>
+
+  /**
    * Find all SeriesCollection
    * optionally with at least one Series belonging to the provided [belongsToLibraryIds] if not null,
    * seriesId will be filtered by the provided [context] libraries.

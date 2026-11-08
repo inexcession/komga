@@ -64,6 +64,21 @@ class SeriesCollectionDao(
       .fetchAndMap(dslRO, context.libraryIds, context.restrictions)
       .firstOrNull()
 
+  override fun findByIds(
+    collectionIds: Collection<String>,
+    context: SearchContext,
+  ): Collection<SeriesCollection> {
+    if (collectionIds.isEmpty()) return emptyList()
+    return dslRO.withTempTable(batchSize, collectionIds).use { tempTable ->
+      dslRO
+        .selectBase(context.restrictions.isRestricted)
+        .where(c.ID.`in`(tempTable.selectTempStrings()))
+        .apply { context.libraryIds?.let { and(s.LIBRARY_ID.`in`(it)) } }
+        .apply { if (context.restrictions.isRestricted) and(context.restrictions.toCondition()) }
+        .fetchAndMap(dslRO, context.libraryIds, context.restrictions)
+    }
+  }
+
   override fun findAll(
     context: SearchContext,
     pageable: Pageable,

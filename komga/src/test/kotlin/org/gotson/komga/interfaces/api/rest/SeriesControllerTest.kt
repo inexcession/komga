@@ -8,6 +8,7 @@ import org.gotson.komga.domain.model.Dimension
 import org.gotson.komga.domain.model.KomgaUser
 import org.gotson.komga.domain.model.MarkSelectedPreference
 import org.gotson.komga.domain.model.Media
+import org.gotson.komga.domain.model.SeriesCollection
 import org.gotson.komga.domain.model.SeriesMetadata
 import org.gotson.komga.domain.model.ThumbnailBook
 import org.gotson.komga.domain.model.makeBook
@@ -18,6 +19,7 @@ import org.gotson.komga.domain.persistence.BookRepository
 import org.gotson.komga.domain.persistence.KomgaUserRepository
 import org.gotson.komga.domain.persistence.LibraryRepository
 import org.gotson.komga.domain.persistence.MediaRepository
+import org.gotson.komga.domain.persistence.SeriesCollectionRepository
 import org.gotson.komga.domain.persistence.SeriesMetadataRepository
 import org.gotson.komga.domain.persistence.SeriesRepository
 import org.gotson.komga.domain.service.BookLifecycle
@@ -67,6 +69,7 @@ class SeriesControllerTest(
   @Autowired private val bookMetadataRepository: BookMetadataRepository,
   @Autowired private val userRepository: KomgaUserRepository,
   @Autowired private val userLifecycle: KomgaUserLifecycle,
+  @Autowired private val collectionRepository: SeriesCollectionRepository,
   @Autowired private val mockMvc: MockMvc,
 ) {
   @MockkBean
@@ -92,6 +95,7 @@ class SeriesControllerTest(
 
   @AfterEach
   fun `clear repository`() {
+    collectionRepository.deleteAll()
     seriesLifecycle.deleteMany(seriesRepository.findAll())
   }
 
@@ -755,6 +759,59 @@ class SeriesControllerTest(
         .andExpect {
           status { isOk() }
           jsonPath("$.url") { value(Matchers.containsString("series")) }
+        }
+    }
+  }
+
+  @Nested
+  inner class GroupedListing {
+    private fun createSeriesWithBook(name: String) =
+      makeSeries(name = name, libraryId = library.id).let { series ->
+        seriesLifecycle.createSeries(series).also { created ->
+          seriesLifecycle.addBooks(created, listOf(makeBook("$name-1", libraryId = library.id)))
+        }
+      }
+
+    @Test
+    @WithMockCustomUser
+    fun `given series and collection when listing grouped series then collected series are replaced by collection and url is hidden`() {
+      createSeriesWithBook("a")
+      val b1 = createSeriesWithBook("b1")
+      val b2 = createSeriesWithBook("b2")
+      val collection = SeriesCollection("b collection", seriesIds = listOf(b1.id, b2.id))
+      collectionRepository.insert(collection)
+
+      mockMvc
+        .post("/api/v1/series/list/grouped") {
+          param("sort", "metadata.titleSort,asc")
+          contentType = MediaType.APPLICATION_JSON
+          content = "{}"
+        }.andExpect {
+          status { isOk() }
+          jsonPath("$.totalElements") { value(2) }
+          jsonPath("$.content.length()") { value(2) }
+          jsonPath("$.content[0].series.name") { value("a") }
+          jsonPath("$.content[0].series.url") { value("") }
+          jsonPath("$.content[0].collection") { doesNotExist() }
+          jsonPath("$.content[1].collection.id") { value(collection.id) }
+          jsonPath("$.content[1].collection.name") { value("b collection") }
+          jsonPath("$.content[1].collection.seriesIds.length()") { value(2) }
+          jsonPath("$.content[1].series") { doesNotExist() }
+        }
+    }
+
+    @Test
+    @WithMockCustomUser(roles = ["ADMIN"])
+    fun `given admin user when listing grouped series then url is available`() {
+      createSeriesWithBook("series")
+
+      mockMvc
+        .post("/api/v1/series/list/grouped") {
+          contentType = MediaType.APPLICATION_JSON
+          content = "{}"
+        }.andExpect {
+          status { isOk() }
+          jsonPath("$.content[0].series.url") { value(Matchers.containsString("series")) }
         }
     }
   }

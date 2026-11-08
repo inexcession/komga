@@ -4,6 +4,7 @@ import org.gotson.komga.application.query.isEmpty
 import org.gotson.komga.domain.model.SearchContext
 import org.gotson.komga.domain.model.SearchField
 import org.gotson.komga.domain.model.SeriesSearch
+import org.gotson.komga.domain.persistence.SeriesCollectionRepository
 import org.gotson.komga.infrastructure.jooq.RequiredJoin
 import org.gotson.komga.infrastructure.jooq.SeriesSearchHelper
 import org.gotson.komga.infrastructure.jooq.SplitDslDaoBase
@@ -23,8 +24,10 @@ import org.gotson.komga.interfaces.api.rest.dto.BookMetadataAggregationDto
 import org.gotson.komga.interfaces.api.rest.dto.GroupCountDto
 import org.gotson.komga.interfaces.api.rest.dto.NotableEntityDto
 import org.gotson.komga.interfaces.api.rest.dto.SeriesDto
+import org.gotson.komga.interfaces.api.rest.dto.SeriesGroupedItemDto
 import org.gotson.komga.interfaces.api.rest.dto.SeriesMetadataDto
 import org.gotson.komga.interfaces.api.rest.dto.WebLinkDto
+import org.gotson.komga.interfaces.api.rest.dto.toDto
 import org.gotson.komga.jooq.main.Tables
 import org.gotson.komga.jooq.main.tables.records.BookMetadataAggregationRecord
 import org.gotson.komga.jooq.main.tables.records.SeriesMetadataRecord
@@ -33,6 +36,7 @@ import org.jooq.Condition
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.ResultQuery
+import org.jooq.SelectJoinStep
 import org.jooq.SelectOnConditionStep
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.count
@@ -48,16 +52,32 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import java.net.URL
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 const val BOOKS_UNREAD_COUNT = "booksUnreadCount"
 const val BOOKS_IN_PROGRESS_COUNT = "booksInProgressCount"
 const val BOOKS_READ_COUNT = "booksReadCount"
+
+private const val KIND_SERIES = "SERIES"
+private const val KIND_COLLECTION = "COLLECTION"
+private const val G_KIND = "kind"
+private const val G_ITEM_ID = "item_id"
+private const val G_SERIES_ID = "series_id"
+private const val G_TITLE_SORT = "title_sort"
+private const val G_NAME = "name"
+private const val G_CREATED_DATE = "created_date"
+private const val G_LAST_MODIFIED_DATE = "last_modified_date"
+private const val G_RELEASE_DATE = "release_date"
+private const val G_READ_DATE = "read_date"
+private const val G_BOOKS_COUNT = "books_count"
 
 @Component
 class SeriesDtoDao(
   dslRW: DSLContext,
   @Qualifier("dslContextRO") dslRO: DSLContext,
   private val luceneHelper: LuceneHelper,
+  private val collectionRepository: SeriesCollectionRepository,
   @param:Value("#{@komgaProperties.database.batchChunkSize}") private val batchSize: Int,
 ) : SplitDslDaoBase(dslRW, dslRO),
   SeriesDtoRepository {
@@ -65,6 +85,7 @@ class SeriesDtoDao(
   private val d = Tables.SERIES_METADATA
   private val rs = Tables.READ_PROGRESS_SERIES
   private val cs = Tables.COLLECTION_SERIES
+  private val c = Tables.COLLECTION
   private val g = Tables.SERIES_METADATA_GENRE
   private val st = Tables.SERIES_METADATA_TAG
   private val sl = Tables.SERIES_METADATA_SHARING
@@ -116,6 +137,204 @@ class SeriesDtoDao(
     val conditionsRefined = conditions.and(search.regexSearch?.let { it.second.toColumn().likeRegex(it.first) } ?: DSL.noCondition())
 
     return findAll(conditionsRefined, context.userId, pageable, joins, search.fullTextSearch)
+  }
+
+  override fun findAllGrouped(
+    search: SeriesSearch,
+    context: SearchContext,
+    pageable: Pageable,
+  ): Page<SeriesGroupedItemDto> {
+    requireNotNull(context.userId) { "Missing userId in search context" }
+
+    val (conditions, joins) = SeriesSearchHelper(context).toCondition(search.condition)
+    val conditionsRefined = conditions.and(search.regexSearch?.let { it.second.toColumn().likeRegex(it.first) } ?: DSL.noCondition())
+
+    val seriesIds = luceneHelper.searchEntitiesIds(search.fullTextSearch, LuceneEntity.Series)
+    val collectionIds = luceneHelper.searchEntitiesIds(search.fullTextSearch, LuceneEntity.Collection)
+
+    // all the series matching the search conditions
+    val matched =
+      DSL
+        .selectDistinct(
+          s.ID.`as`(G_SERIES_ID),
+          d.TITLE_SORT.`as`(G_TITLE_SORT),
+          s.NAME.`as`(G_NAME),
+          s.CREATED_DATE.`as`(G_CREATED_DATE),
+          s.LAST_MODIFIED_DATE.`as`(G_LAST_MODIFIED_DATE),
+          bma.RELEASE_DATE.`as`(G_RELEASE_DATE),
+          rs.MOST_RECENT_READ_DATE.`as`(G_READ_DATE),
+          s.BOOK_COUNT.`as`(G_BOOKS_COUNT),
+        ).from(s)
+        .leftJoin(d)
+        .on(s.ID.eq(d.SERIES_ID))
+        .leftJoin(bma)
+        .on(s.ID.eq(bma.SERIES_ID))
+        .leftJoin(rs)
+        .on(s.ID.eq(rs.SERIES_ID))
+        .and(readProgressConditionSeries(context.userId))
+        .applyJoins(joins)
+        .where(conditionsRefined)
+        .asTable("matched_series")
+
+    val mSeriesId = matched.field(G_SERIES_ID, String::class.java)!!
+    val mReleaseDate = matched.field(G_RELEASE_DATE, LocalDate::class.java)!!
+    val mReadDate = matched.field(G_READ_DATE, LocalDateTime::class.java)!!
+    val mBooksCount = matched.field(G_BOOKS_COUNT, Int::class.java)!!
+
+    // series that do not belong to any collection
+    val standalone =
+      DSL
+        .select(
+          DSL.inline(KIND_SERIES).`as`(G_KIND),
+          mSeriesId.`as`(G_ITEM_ID),
+          matched.field(G_TITLE_SORT, String::class.java)!!.`as`(G_TITLE_SORT),
+          matched.field(G_NAME, String::class.java)!!.`as`(G_NAME),
+          matched.field(G_CREATED_DATE, LocalDateTime::class.java)!!.`as`(G_CREATED_DATE),
+          matched.field(G_LAST_MODIFIED_DATE, LocalDateTime::class.java)!!.`as`(G_LAST_MODIFIED_DATE),
+          mReleaseDate.`as`(G_RELEASE_DATE),
+          mReadDate.`as`(G_READ_DATE),
+          mBooksCount.`as`(G_BOOKS_COUNT),
+        ).from(matched)
+        .where(mSeriesId.notIn(DSL.select(cs.SERIES_ID).from(cs)))
+        .and(mSeriesId.inOrNoCondition(seriesIds))
+
+    // collections containing at least one matching series
+    val collectionSearchCondition =
+      if (search.fullTextSearch.isNullOrBlank())
+        DSL.noCondition()
+      else
+        mSeriesId.inOrNoCondition(seriesIds).or(c.ID.inOrNoCondition(collectionIds))
+
+    val collections =
+      DSL
+        .select(
+          DSL.inline(KIND_COLLECTION).`as`(G_KIND),
+          c.ID.`as`(G_ITEM_ID),
+          c.NAME.`as`(G_TITLE_SORT),
+          c.NAME.`as`(G_NAME),
+          c.CREATED_DATE.`as`(G_CREATED_DATE),
+          c.LAST_MODIFIED_DATE.`as`(G_LAST_MODIFIED_DATE),
+          DSL.min(mReleaseDate).`as`(G_RELEASE_DATE),
+          DSL.max(mReadDate).`as`(G_READ_DATE),
+          DSL.sum(mBooksCount).cast(Int::class.java).`as`(G_BOOKS_COUNT),
+        ).from(matched)
+        .join(cs)
+        .on(cs.SERIES_ID.eq(mSeriesId))
+        .join(c)
+        .on(c.ID.eq(cs.COLLECTION_ID))
+        .where(collectionSearchCondition)
+        .groupBy(c.ID, c.NAME, c.CREATED_DATE, c.LAST_MODIFIED_DATE)
+
+    val grouped = standalone.unionAll(collections).asTable("grouped_items")
+    val gKind = grouped.field(G_KIND, String::class.java)!!
+    val gItemId = grouped.field(G_ITEM_ID, String::class.java)!!
+
+    val groupedSorts =
+      mapOf(
+        "metadata.titleSort" to grouped.field(G_TITLE_SORT, String::class.java)!!.unicode3(),
+        "name" to grouped.field(G_NAME, String::class.java)!!.unicode3(),
+        "createdDate" to grouped.field(G_CREATED_DATE)!!,
+        "created" to grouped.field(G_CREATED_DATE)!!,
+        "lastModifiedDate" to grouped.field(G_LAST_MODIFIED_DATE)!!,
+        "lastModified" to grouped.field(G_LAST_MODIFIED_DATE)!!,
+        "booksMetadata.releaseDate" to grouped.field(G_RELEASE_DATE)!!,
+        "readDate" to grouped.field(G_READ_DATE)!!,
+        "booksCount" to grouped.field(G_BOOKS_COUNT)!!,
+        "random" to DSL.rand(),
+      )
+
+    val relevanceIds = seriesIds.orEmpty() + collectionIds.orEmpty()
+    val orderBy =
+      pageable.sort.mapNotNull {
+        if (it.property == "relevance" && relevanceIds.isNotEmpty())
+          gItemId.sortByValues(relevanceIds, it.isAscending)
+        else
+          it.toSortField(groupedSorts)
+      }
+    // deterministic tie-breaker for stable pagination
+    val orderByStable = if (orderBy.isNotEmpty() && pageable.sort.none { it.property == "random" }) orderBy + gItemId.asc() else orderBy
+
+    val pageItems =
+      if (pageable.isEmpty())
+        emptyList()
+      else
+        dslRO
+          .select(gKind, gItemId)
+          .from(grouped)
+          .orderBy(orderByStable)
+          .apply { if (pageable.isPaged) limit(pageable.pageSize).offset(pageable.offset) }
+          .fetch()
+          .map { it.value1() to it.value2() }
+
+    val pageSeriesIds = pageItems.filter { it.first == KIND_SERIES }.map { it.second }
+    val pageCollectionIds = pageItems.filter { it.first == KIND_COLLECTION }.map { it.second }
+
+    val seriesById =
+      if (pageSeriesIds.isEmpty())
+        emptyMap()
+      else
+        dslRO.withTempTable(batchSize, pageSeriesIds).use { tempTable ->
+          dslRO
+            .selectBase(context.userId)
+            .where(s.ID.`in`(tempTable.selectTempStrings()))
+            .groupBy(*groupFields)
+            .fetchAndMap(dslRO)
+            .associateBy { it.id }
+        }
+
+    val collectionsById =
+      if (pageCollectionIds.isEmpty())
+        emptyMap()
+      else
+        collectionRepository
+          .findByIds(pageCollectionIds, context)
+          .associate { it.id to it.toDto() }
+
+    val dtos =
+      pageItems.mapNotNull { (kind, id) ->
+        when (kind) {
+          KIND_SERIES -> seriesById[id]?.let { SeriesGroupedItemDto(series = it) }
+          KIND_COLLECTION -> collectionsById[id]?.let { SeriesGroupedItemDto(collection = it) }
+          else -> null
+        }
+      }
+
+    val count =
+      if (pageable.isUnpaged)
+        dtos.size
+      else
+        dslRO.fetchCount(grouped)
+
+    val pageSort = if (orderBy.isNotEmpty()) pageable.sort else Sort.unsorted()
+    return PageImpl(
+      dtos,
+      if (pageable.isPaged)
+        PageRequest.of(pageable.pageNumber, pageable.pageSize, pageSort)
+      else
+        PageRequest.of(0, maxOf(count, 20), pageSort),
+      count.toLong(),
+    )
+  }
+
+  private fun <R : Record> SelectJoinStep<R>.applyJoins(joins: Set<RequiredJoin>): SelectJoinStep<R> {
+    var step = this
+    joins.forEach { join ->
+      when (join) {
+        is RequiredJoin.Collection -> {
+          val csAlias = csAlias(join.collectionId)
+          step = step.leftJoin(csAlias).on(s.ID.eq(csAlias.SERIES_ID).and(csAlias.COLLECTION_ID.eq(join.collectionId)))
+        }
+        // always joined
+        is RequiredJoin.ReadProgress -> Unit
+        RequiredJoin.SeriesMetadata -> Unit
+        // Book joins - not needed
+        RequiredJoin.BookMetadata -> Unit
+        RequiredJoin.BookMetadataAggregation -> Unit
+        RequiredJoin.Media -> Unit
+        is RequiredJoin.ReadList -> Unit
+      }
+    }
+    return step
   }
 
   override fun findAllRecentlyUpdated(

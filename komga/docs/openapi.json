@@ -6506,6 +6506,85 @@
         ]
       }
     },
+    "/api/v1/series/list/grouped": {
+      "post": {
+        "description": "Series that belong to a collection are replaced by the collection(s) they belong to. Series that do not belong to any collection are returned as-is.",
+        "operationId": "getSeriesGrouped",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "unpaged",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Zero-based page index (0..N)",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The size of the page to be returned",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesSearch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSeriesGroupedItemDto"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "summary": "List series grouped by collections",
+        "tags": [
+          "Series"
+        ]
+      }
+    },
     "/api/v1/series/new": {
       "get": {
         "description": "Return newly added series.",
@@ -12334,6 +12413,52 @@
           }
         }
       },
+      "PageSeriesGroupedItemDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeriesGroupedItemDto"
+            }
+          },
+          "empty": {
+            "type": "boolean"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PageString": {
         "type": "object",
         "properties": {
@@ -13898,6 +14023,17 @@
           "oneshot",
           "url"
         ]
+      },
+      "SeriesGroupedItemDto": {
+        "type": "object",
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/CollectionDto"
+          },
+          "series": {
+            "$ref": "#/components/schemas/SeriesDto"
+          }
+        }
       },
       "SeriesMetadataDto": {
         "type": "object",

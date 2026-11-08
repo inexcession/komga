@@ -58,6 +58,7 @@ import org.gotson.komga.interfaces.api.rest.dto.BookDto
 import org.gotson.komga.interfaces.api.rest.dto.CollectionDto
 import org.gotson.komga.interfaces.api.rest.dto.GroupCountDto
 import org.gotson.komga.interfaces.api.rest.dto.SeriesDto
+import org.gotson.komga.interfaces.api.rest.dto.SeriesGroupedItemDto
 import org.gotson.komga.interfaces.api.rest.dto.SeriesMetadataUpdateDto
 import org.gotson.komga.interfaces.api.rest.dto.TachiyomiReadProgressUpdateV2Dto
 import org.gotson.komga.interfaces.api.rest.dto.TachiyomiReadProgressV2Dto
@@ -250,6 +251,41 @@ class SeriesController(
 
     return seriesDtoRepository
       .findAll(search, SearchContext(principal.user), pageRequest)
+      .map { it.restrictUrl(!principal.user.isAdmin) }
+  }
+
+  @Operation(
+    summary = "List series grouped by collections",
+    description = "Series that belong to a collection are replaced by the collection(s) they belong to. Series that do not belong to any collection are returned as-is.",
+    tags = [OpenApiConfiguration.TagNames.SERIES],
+  )
+  @PageableAsQueryParam
+  @PostMapping("v1/series/list/grouped")
+  fun getSeriesGrouped(
+    @AuthenticationPrincipal principal: KomgaPrincipal,
+    @RequestBody search: SeriesSearch,
+    @RequestParam(name = "unpaged", required = false) unpaged: Boolean = false,
+    @Parameter(hidden = true) page: Pageable,
+  ): Page<SeriesGroupedItemDto> {
+    val sort =
+      when {
+        page.sort.isSorted -> page.sort
+        !search.fullTextSearch.isNullOrBlank() -> Sort.by("relevance")
+        else -> Sort.unsorted()
+      }
+
+    val pageRequest =
+      if (unpaged)
+        UnpagedSorted(sort)
+      else
+        PageRequest.of(
+          page.pageNumber,
+          page.pageSize,
+          sort,
+        )
+
+    return seriesDtoRepository
+      .findAllGrouped(search, SearchContext(principal.user), pageRequest)
       .map { it.restrictUrl(!principal.user.isAdmin) }
   }
 
