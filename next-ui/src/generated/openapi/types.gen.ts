@@ -713,6 +713,20 @@ export type PageSeriesDto = {
     totalPages?: number;
 };
 
+export type PageSeriesGroupedItemDto = {
+    content?: Array<SeriesGroupedItemDto>;
+    empty?: boolean;
+    first?: boolean;
+    last?: boolean;
+    number?: number;
+    numberOfElements?: number;
+    pageable?: PageableObject;
+    size?: number;
+    sort?: SortObject;
+    totalElements?: number;
+    totalPages?: number;
+};
+
 export type PageString = {
     content?: Array<string>;
     empty?: boolean;
@@ -1129,6 +1143,11 @@ export type SeriesDto = {
     name: string;
     oneshot: boolean;
     url: string;
+};
+
+export type SeriesGroupedItemDto = {
+    collection?: CollectionDto;
+    series?: SeriesDto;
 };
 
 export type SeriesMetadataDto = {
@@ -4553,6 +4572,45 @@ export type GetSeriesAlphabeticalGroupsResponses = {
 };
 
 export type GetSeriesAlphabeticalGroupsResponse = GetSeriesAlphabeticalGroupsResponses[keyof GetSeriesAlphabeticalGroupsResponses];
+
+export type GetSeriesGroupedData = {
+    body: SeriesSearch;
+    path?: never;
+    query?: {
+        unpaged?: boolean;
+        /**
+         * Zero-based page index (0..N)
+         */
+        page?: number;
+        /**
+         * The size of the page to be returned
+         */
+        size?: number;
+        /**
+         * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+         */
+        sort?: Array<string>;
+    };
+    url: '/api/v1/series/list/grouped';
+};
+
+export type GetSeriesGroupedErrors = {
+    /**
+     * Bad Request
+     */
+    400: ValidationErrorResponse;
+};
+
+export type GetSeriesGroupedError = GetSeriesGroupedErrors[keyof GetSeriesGroupedErrors];
+
+export type GetSeriesGroupedResponses = {
+    /**
+     * OK
+     */
+    200: PageSeriesGroupedItemDto;
+};
+
+export type GetSeriesGroupedResponse = GetSeriesGroupedResponses[keyof GetSeriesGroupedResponses];
 
 export type GetSeriesNewData = {
     body?: never;

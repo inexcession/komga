@@ -1,0 +1,91 @@
+<template>
+  <ItemCardWide
+    :title="collection.name"
+    :text="seriesCountText"
+    :poster-url="collectionPosterUrl(collection.id, cacheStore.getVersion(collection.id))"
+    :quick-action-icon="quickActionIcon"
+    :quick-action-props="quickActionProps"
+    :menu-icon="menuIcon"
+    :menu-props="menuProps"
+    :card-to="linkTo"
+    v-bind="props"
+    :disable-selection="!isAdmin"
+    @selection="(val, event) => emit('selection', val, event)"
+    @click-quick-action="showEditMetadataDialog()"
+    @card-long-press="isAdmin ? (bottomSheet = true) : undefined"
+  />
+  <CollectionMenuSheet
+    v-model="bottomSheet"
+    :collection="collection"
+    :activator="menuActivator"
+    add-select-action
+  />
+</template>
+
+<script setup lang="ts">
+import { collectionPosterUrl } from '@/api/images'
+import { useIntl } from 'vue-intl'
+import type { ItemCardEmits, ItemCardProps } from '@/types/ItemCard'
+import { useCurrentUser } from '@/colada/users'
+import { useEditCollectionDialog } from '@/composables/collection/useEditCollectionDialog'
+import type { CollectionDto } from '@/generated/openapi'
+import { useImageCacheStore } from '@/stores/image-cache'
+import { BrowsingContextKey, formatBrowsingContextAsQueryParam } from '@/functions/browsing-context'
+import type { RouteLocationObject } from '@/types/route'
+
+const intl = useIntl()
+const cacheStore = useImageCacheStore()
+
+const { collection, ...props } = defineProps<
+  {
+    collection: CollectionDto
+  } & ItemCardProps
+>()
+const emit = defineEmits<ItemCardEmits>()
+
+const bottomSheet = ref(false)
+
+const seriesCountText = computed(() =>
+  intl.formatMessage(
+    {
+      description: 'Collection card subtitle: count of series',
+      defaultMessage: `{count, plural,
+one {# series}
+other {# series}
+}`,
+      id: '0J3Gvp',
+    },
+    { count: collection.seriesIds.length },
+  ),
+)
+
+const context = inject(BrowsingContextKey, undefined)
+const linkTo = computed<RouteLocationObject>(() => ({
+  name: '/collection/[id]',
+  params: { id: collection.id },
+  query: formatBrowsingContextAsQueryParam(toValue(context)),
+}))
+
+const { isAdmin } = useCurrentUser()
+const quickActionIcon = computed(() => (isAdmin.value ? 'i-mdi:pencil' : undefined))
+const quickActionProps = computed(() => ({
+  onMouseenter: (event: Event) => (editActivator.value = event.currentTarget as Element),
+}))
+const menuIcon = computed(() => (isAdmin.value ? 'i-mdi:dots-vertical' : undefined))
+const menuProps = computed(() => ({
+  onmouseenter: (event: Event) => (menuActivator.value = event.currentTarget as Element),
+}))
+
+const {
+  prepareDialog: prepareEditCollectionDialog,
+  showDialog: showEditCollectionDialog,
+  activator: editActivator,
+} = useEditCollectionDialog()
+
+function showEditMetadataDialog() {
+  prepareEditCollectionDialog(collection)
+  showEditCollectionDialog()
+}
+
+const menuActivator = ref()
+</script>

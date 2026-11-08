@@ -54,6 +54,7 @@ declare module 'vue' {
     ChipCount: typeof import('./components/ChipCount.vue')['default']
     CollectionAddTo: typeof import('./components/collection/AddTo.vue')['default']
     CollectionCard: typeof import('./components/collection/card/CollectionCard.vue')['default']
+    CollectionCardWide: typeof import('./components/collection/CardWide/CollectionCardWide.vue')['default']
     CollectionDeletionWarning: typeof import('./components/collection/DeletionWarning.vue')['default']
     CollectionFetchDetails: typeof import('./components/collection/fetch/Details.vue')['default']
     CollectionFormEdit: typeof import('./components/collection/form/Edit.vue')['default']

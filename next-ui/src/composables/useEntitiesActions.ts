@@ -13,7 +13,8 @@ import {
 } from '@/colada/books'
 import { type Action, actionDetails, ActionName } from '@/types/action/action'
 import { getCommonActions } from '@/functions/selection'
-import { isBook, isSeries, resolveEntityKind } from '@/functions/entity'
+import { isBook, isCollection, isSeries, resolveEntityKind } from '@/functions/entity'
+import { useDeleteCollection } from '@/colada/collections'
 import {
   useAnalyzeSeries,
   useDeleteSeries,
@@ -141,7 +142,9 @@ export function useEntitiesActions(
       onClick: () => refreshMetadata(),
     },
     [ActionName.Delete]: {
-      shouldShow: () => true,
+      shouldShow: () =>
+        entityKinds.value.length === 1 ||
+        !entityKinds.value.some((k) => k === 'collection' || k === 'readlist'),
       onMouseenter: (event: Event) =>
         (dialogConfirm.value.activator = event.currentTarget as Element),
       onClick: () => {
@@ -341,6 +344,7 @@ export function useEntitiesActions(
         toValue(entities).forEach((item) => {
           if (isBook(item)) useDeleteBook().mutate(item.id)
           if (isSeries(item)) useDeleteSeries().mutate(item.id)
+          if (isCollection(item)) useDeleteCollection().mutate(item.id)
         })
       }
 

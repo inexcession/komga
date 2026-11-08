@@ -13,6 +13,7 @@ import {
   komgaDeleteUserUploadedSeriesThumbnail,
   komgaGetSeries,
   komgaGetSeriesById,
+  komgaGetSeriesGrouped,
   komgaGetSeriesThumbnails,
   komgaGetSeriesUpdated,
   komgaMarkSeriesAsRead,
@@ -21,6 +22,9 @@ import {
   komgaSeriesAnalyze,
   komgaSeriesRefreshMetadata,
   komgaUpdateSeriesMetadata,
+  type CollectionDto,
+  type PageSeriesGroupedItemDto,
+  type SeriesDto,
   type SeriesMetadataUpdateDto,
   type SeriesSearch,
 } from '@/generated/openapi'
@@ -30,6 +34,8 @@ import { STALE_TIME } from '@/types/time'
 export const QUERY_KEYS_SERIES = {
   root: ['series'] as const,
   bySearch: (request: object) => [...QUERY_KEYS_SERIES.root, JSON.stringify(request)] as const,
+  groupedBySearch: (request: object) =>
+    [...QUERY_KEYS_SERIES.root, 'grouped', JSON.stringify(request)] as const,
   byId: (seriesId: string) => [...QUERY_KEYS_SERIES.root, seriesId] as const,
   updated: (request: object) =>
     [...QUERY_KEYS_SERIES.root, 'updated', JSON.stringify(request)] as const,
@@ -63,6 +69,55 @@ export const seriesListQueryInfinite = defineInfiniteQueryOptions(
           sort: sort?.map((it) => sortToString(it)),
         },
       }),
+    getNextPageParam: (lastPage, _, lastPageParam) =>
+      !lastPage?.last ? lastPageParam.next() : null,
+  }),
+)
+
+/**
+ * Unwrap a page of grouped items into a page of series or collections.
+ */
+export function unwrapGroupedPage(page: PageSeriesGroupedItemDto) {
+  const { content, ...rest } = page
+  return {
+    ...rest,
+    content: (content ?? []).flatMap((it): (SeriesDto | CollectionDto)[] =>
+      it.series ? [it.series] : it.collection ? [it.collection] : [],
+    ),
+  }
+}
+
+export const seriesGroupedListQuery = defineQueryOptions(
+  ({ search, pageRequest }: { search: SeriesSearch; pageRequest?: PageRequest }) => ({
+    key: QUERY_KEYS_SERIES.groupedBySearch({ search: search, pageRequest: pageRequest }),
+    query: async () =>
+      unwrapGroupedPage(
+        await komgaGetSeriesGrouped({
+          body: search,
+          query: {
+            ...pageRequest,
+          },
+        }),
+      ),
+    placeholderData: (previousData) => previousData,
+  }),
+)
+
+export const seriesGroupedListQueryInfinite = defineInfiniteQueryOptions(
+  ({ search, sort }: { search: SeriesSearch; sort?: Sort[] }) => ({
+    key: QUERY_KEYS_SERIES.groupedBySearch({ search: search, sort: sort, infinite: true }),
+    initialPageParam: new PageRequest(0, 50, sort),
+    query: async ({ pageParam }) =>
+      unwrapGroupedPage(
+        await komgaGetSeriesGrouped({
+          body: search,
+          query: {
+            page: pageParam.page,
+            size: pageParam.size,
+            sort: sort?.map((it) => sortToString(it)),
+          },
+        }),
+      ),
     getNextPageParam: (lastPage, _, lastPageParam) =>
       !lastPage?.last ? lastPageParam.next() : null,
   }),

@@ -13,6 +13,7 @@ export const useAppStore = defineStore(
     const importBooksPath = ref('')
     const browsingPageSize = ref<PageSize>(20)
     const stretchPoster = ref(true)
+    const groupSeriesInCollections = ref(false)
 
     const browsingPaging = ref<Paging>('scroll')
     const isBrowsingPaged = computed(() => browsingPaging.value === 'paged')
@@ -47,6 +48,7 @@ export const useAppStore = defineStore(
       rememberMe,
       importBooksPath,
       stretchPoster,
+      groupSeriesInCollections,
       browsingPageSize,
       browsingPaging,
       gridCardWidth,
@@ -67,6 +69,7 @@ export const useAppStore = defineStore(
         'rememberMe',
         'importBooksPath',
         'stretchPoster',
+        'groupSeriesInCollections',
         'browsingPageSize',
         'browsingPaging',
         'presentationMode',

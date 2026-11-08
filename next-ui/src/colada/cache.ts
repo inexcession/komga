@@ -45,6 +45,27 @@ export const expireCachePredicate =
     return false
   }
 
+/**
+ * Generate a predicate function that can be passed to `queryCache.invalidateQueries`.
+ * Matches if the array at {@link key} in the data object contains {@link target}.
+ * @param target the value to look for in the array at {@link key}
+ * @param key the key in the data object holding an array of values
+ */
+export const expireCacheArrayPredicate =
+  (target: string, key: string): ((entry: UseQueryEntry<unknown, unknown, unknown>) => boolean) =>
+  (entry) => {
+    const data = entry.state.value.data
+    const matches = (item: Record<string, unknown>) =>
+      Array.isArray(item[key]) && (item[key] as unknown[]).includes(target)
+
+    if (v.is(HasIdSchema, data)) return matches(data)
+    if (v.is(StandardPageSchema, data)) return data.content.some((item) => matches(item))
+    if (v.is(InfinitePageSchema, data)) {
+      return data.pages.some((page) => page.content.some((item) => matches(item)))
+    }
+    return false
+  }
+
 function entityChanged(
   key: EntryKey,
   targetId: string,
@@ -86,7 +107,14 @@ export function clearAllBooks() {
 }
 
 export function clearSeries(seriesId: string, clearChildrenBooks: boolean) {
-  void entityChanged(QUERY_KEYS_SERIES.root, seriesId)
+  const byId = expireCachePredicate(seriesId)
+  // grouped series listings can contain collections holding the series
+  const byCollectionMember = expireCacheArrayPredicate(seriesId, 'seriesIds')
+  void entityChanged(
+    QUERY_KEYS_SERIES.root,
+    seriesId,
+    (entry) => byId(entry) || byCollectionMember(entry),
+  )
   if (clearChildrenBooks)
     void entityChanged(QUERY_KEYS_BOOKS.root, seriesId, expireCachePredicate(seriesId, 'seriesId'))
 }

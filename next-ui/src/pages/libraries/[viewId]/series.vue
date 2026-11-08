@@ -75,33 +75,62 @@
     @load-next-page="loadNextPage()"
   >
     <template #default="{ item, isSelected, preSelect, toggleSelect }">
-      <SeriesCard
-        v-if="presentationModeEffective === 'grid'"
-        :stretch-poster="appStore.stretchPoster"
-        :series="item"
-        :selected="isSelected"
-        :pre-select="preSelect"
-        :width="display.xs.value ? 'auto' : appStore.gridCardWidth"
-        :sort-active="sortActive"
-        @selection="(_val, event) => toggleSelect(event as MouseEvent)"
-      />
+      <template v-if="presentationModeEffective === 'grid'">
+        <CollectionCard
+          v-if="isCollection(item)"
+          :stretch-poster="appStore.stretchPoster"
+          :collection="item"
+          :selected="isSelected"
+          :pre-select="preSelect"
+          :width="display.xs.value ? 'auto' : appStore.gridCardWidth"
+          @selection="(_val, event) => toggleSelect(event as MouseEvent)"
+        />
+        <SeriesCard
+          v-else
+          :stretch-poster="appStore.stretchPoster"
+          :series="item"
+          :selected="isSelected"
+          :pre-select="preSelect"
+          :width="display.xs.value ? 'auto' : appStore.gridCardWidth"
+          :sort-active="sortActive"
+          @selection="(_val, event) => toggleSelect(event as MouseEvent)"
+        />
+      </template>
 
-      <SeriesCardWide
-        v-if="presentationModeEffective === 'list'"
-        :stretch-poster="appStore.stretchPoster"
-        :series="item"
-        :selected="isSelected"
-        :pre-select="preSelect"
-        :width="appStore.gridCardWidth"
-        @selection="(_val, event) => toggleSelect(event as MouseEvent)"
-      />
+      <template v-if="presentationModeEffective === 'list'">
+        <CollectionCardWide
+          v-if="isCollection(item)"
+          :stretch-poster="appStore.stretchPoster"
+          :collection="item"
+          :selected="isSelected"
+          :pre-select="preSelect"
+          :width="appStore.gridCardWidth"
+          @selection="(_val, event) => toggleSelect(event as MouseEvent)"
+        />
+        <SeriesCardWide
+          v-else
+          :stretch-poster="appStore.stretchPoster"
+          :series="item"
+          :selected="isSelected"
+          :pre-select="preSelect"
+          :width="appStore.gridCardWidth"
+          @selection="(_val, event) => toggleSelect(event as MouseEvent)"
+        />
+      </template>
     </template>
   </ItemBrowser>
 </template>
 
 <script lang="ts" setup>
 import { useInfiniteQuery, useQuery } from '@pinia/colada'
-import { seriesListQuery, seriesListQueryInfinite } from '@/colada/series'
+import {
+  seriesGroupedListQuery,
+  seriesGroupedListQueryInfinite,
+  seriesListQuery,
+  seriesListQueryInfinite,
+} from '@/colada/series'
+import { useCurrentUser } from '@/colada/users'
+import { isCollection } from '@/functions/entity'
 
 import { PageRequest, type Sort } from '@/types/PageRequest'
 import { useGetLibrariesByViewId } from '@/composables/libraries'
@@ -201,30 +230,69 @@ watch([() => JSON.stringify(conds.value), () => appStore.browsingPaging], () =>
   selectionStore.clear(),
 )
 
+watch(
+  () => appStore.groupSeriesInCollections,
+  () => {
+    selectionStore.clear()
+    page1.value = 1
+  },
+)
+
 const apiQuery = computed(() => ({
   condition: conds.value,
 }))
 
-const { data: dataPaged } = useQuery(() => ({
+const { data: dataPagedSeries } = useQuery(() => ({
   ...seriesListQuery({
     search: { ...apiQuery.value },
     pageRequest: PageRequest.FromPageSize(appStore.browsingPageSize, page0.value, sortActive.value),
   }),
-  enabled: isBrowsingPaged.value,
+  enabled: isBrowsingPaged.value && !appStore.groupSeriesInCollections,
 }))
+
+const { data: dataPagedGrouped } = useQuery(() => ({
+  ...seriesGroupedListQuery({
+    search: { ...apiQuery.value },
+    pageRequest: PageRequest.FromPageSize(appStore.browsingPageSize, page0.value, sortActive.value),
+  }),
+  enabled: isBrowsingPaged.value && appStore.groupSeriesInCollections,
+}))
+
+const dataPaged = computed(() =>
+  appStore.groupSeriesInCollections ? dataPagedGrouped.value : dataPagedSeries.value,
+)
 
 watch(dataPaged, (newDataPaged) => {
   if (newDataPaged) pageCount.value = newDataPaged.totalPages ?? 0
 })
 
 const {
-  data: dataInfinite,
-  loadNextPage,
-  hasNextPage,
+  data: dataInfiniteSeries,
+  loadNextPage: loadNextPageSeries,
+  hasNextPage: hasNextPageSeries,
 } = useInfiniteQuery(() => ({
   ...seriesListQueryInfinite({ search: { ...apiQuery.value }, sort: sortActive.value }),
-  enabled: isBrowsingScroll.value,
+  enabled: isBrowsingScroll.value && !appStore.groupSeriesInCollections,
 }))
+
+const {
+  data: dataInfiniteGrouped,
+  loadNextPage: loadNextPageGrouped,
+  hasNextPage: hasNextPageGrouped,
+} = useInfiniteQuery(() => ({
+  ...seriesGroupedListQueryInfinite({ search: { ...apiQuery.value }, sort: sortActive.value }),
+  enabled: isBrowsingScroll.value && appStore.groupSeriesInCollections,
+}))
+
+const dataInfinite = computed(() =>
+  appStore.groupSeriesInCollections ? dataInfiniteGrouped.value : dataInfiniteSeries.value,
+)
+const hasNextPage = computed(() =>
+  appStore.groupSeriesInCollections ? hasNextPageGrouped.value : hasNextPageSeries.value,
+)
+const loadNextPage = () =>
+  appStore.groupSeriesInCollections ? loadNextPageGrouped() : loadNextPageSeries()
+
 const dataInfiniteFlat = computed(() =>
   dataInfinite.value?.pages.flatMap((it) => it?.content ?? []),
 )
@@ -238,7 +306,11 @@ const totalElements = computed(() =>
     : dataInfinite.value?.pages?.[0]?.totalElements,
 )
 
-useSelectionContextualActions(dataItems)
+const { isAdmin } = useCurrentUser()
+const selectableItems = computed(() =>
+  isAdmin.value ? dataItems.value : dataItems.value?.filter((it) => !isCollection(it)),
+)
+useSelectionContextualActions(selectableItems)
 
 const filterDrawer = ref(false)
 </script>

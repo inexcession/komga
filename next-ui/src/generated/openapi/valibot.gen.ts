@@ -1060,6 +1060,29 @@ export const vPageSeriesDto = v.object({
     totalPages: v.optional(v.pipe(v.number(), v.integer(), v.minValue(-2147483648, 'Invalid value: Expected int32 to be >= -2147483648'), v.maxValue(2147483647, 'Invalid value: Expected int32 to be <= 2147483647')))
 });
 
+export const vSeriesGroupedItemDto = v.object({
+    collection: v.optional(vCollectionDto),
+    series: v.optional(vSeriesDto)
+});
+
+export const vPageSeriesGroupedItemDto = v.object({
+    content: v.optional(v.array(vSeriesGroupedItemDto)),
+    empty: v.optional(v.boolean()),
+    first: v.optional(v.boolean()),
+    last: v.optional(v.boolean()),
+    number: v.optional(v.pipe(v.number(), v.integer(), v.minValue(-2147483648, 'Invalid value: Expected int32 to be >= -2147483648'), v.maxValue(2147483647, 'Invalid value: Expected int32 to be <= 2147483647'))),
+    numberOfElements: v.optional(v.pipe(v.number(), v.integer(), v.minValue(-2147483648, 'Invalid value: Expected int32 to be >= -2147483648'), v.maxValue(2147483647, 'Invalid value: Expected int32 to be <= 2147483647'))),
+    pageable: v.optional(vPageableObject),
+    size: v.optional(v.pipe(v.number(), v.integer(), v.minValue(-2147483648, 'Invalid value: Expected int32 to be >= -2147483648'), v.maxValue(2147483647, 'Invalid value: Expected int32 to be <= 2147483647'))),
+    sort: v.optional(vSortObject),
+    totalElements: v.optional(v.pipe(v.union([
+        v.number(),
+        v.string(),
+        v.bigint()
+    ]), v.transform(x => BigInt(x)), v.minValue(BigInt('-9223372036854775808'), 'Invalid value: Expected int64 to be >= -9223372036854775808'), v.maxValue(BigInt('9223372036854775807'), 'Invalid value: Expected int64 to be <= 9223372036854775807'))),
+    totalPages: v.optional(v.pipe(v.number(), v.integer(), v.minValue(-2147483648, 'Invalid value: Expected int32 to be >= -2147483648'), v.maxValue(2147483647, 'Invalid value: Expected int32 to be <= 2147483647')))
+});
+
 export const vWebLinkUpdateDto = v.object({
     label: v.pipe(v.string(), v.minLength(1)),
     url: v.optional(v.string())
@@ -3144,3 +3167,17 @@ export const vGetSeriesAlphabeticalGroupsBody = vSeriesSearch;
  * OK
  */
 export const vGetSeriesAlphabeticalGroupsResponse = v.array(vGroupCountDto);
+
+export const vGetSeriesGroupedBody = vSeriesSearch;
+
+export const vGetSeriesGroupedQuery = v.object({
+    unpaged: v.optional(v.boolean()),
+    page: v.optional(v.pipe(v.number(), v.integer())),
+    size: v.optional(v.pipe(v.number(), v.integer())),
+    sort: v.optional(v.array(v.string()))
+});
+
+/**
+ * OK
+ */
+export const vGetSeriesGroupedResponse = vPageSeriesGroupedItemDto;

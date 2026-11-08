@@ -6,10 +6,12 @@ import { mockPage } from '@/mocks/api/pageable'
 import {
   handleGetSeries,
   handleGetSeriesById,
+  handleGetSeriesGrouped,
   handleGetSeriesThumbnails,
 } from '@/generated/openapi/msw.gen'
 import { response200OK, response404NotFound } from '@/mocks/api/utils'
-import type { SeriesDto } from '@/generated/openapi'
+import type { SeriesDto, SeriesGroupedItemDto } from '@/generated/openapi'
+import { mockCollection1 } from '@/mocks/api/handlers/collections'
 
 export const mockSeries1 = {
   id: '57',
@@ -202,6 +204,21 @@ export const seriesHandlers = [
     return response200OK(
       mockPage(
         selectedSeries,
+        new PageRequest(Number(query.get('page')), Number(query.get('size')), query.getAll('sort')),
+      ),
+    )
+  }),
+  handleGetSeriesGrouped(({ request }) => {
+    const query = new URL(request.url).searchParams
+    const groupedItems: SeriesGroupedItemDto[] = [
+      { collection: mockCollection1 },
+      { series: mockSeries2 },
+      { series: series3 },
+    ]
+
+    return response200OK(
+      mockPage(
+        groupedItems,
         new PageRequest(Number(query.get('page')), Number(query.get('size')), query.getAll('sort')),
       ),
     )

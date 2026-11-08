@@ -559,6 +559,10 @@
     "defaultMessage": "General",
     "description": "Book Details: General"
   },
+  "9GjWic": {
+    "defaultMessage": "Group series into collections",
+    "description": "User menu: group series that belong to a collection into the collection"
+  },
   "9TJRkm": {
     "defaultMessage": "Import series metadata",
     "description": "Form add/edit library: Metadata - mylar series metadata"

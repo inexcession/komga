@@ -8,10 +8,9 @@
       v-bind="props"
       elevation="1"
       hover-elevation="2"
-      :class="isPreSelect || selected ? 'cursor-pointer' : 'cursor-default'"
-      @click="
-        (event: Event) => (isPreSelect || selected ? emit('selection', !selected, event) : {})
-      "
+      :link="!!cardTo"
+      :class="isPreSelect || selected || cardTo ? 'cursor-pointer' : 'cursor-default'"
+      @click="onCardClick"
     >
       <v-card-text>
         <div class="d-flex flex-row ga-4">
@@ -83,7 +82,14 @@
               class="text-headline-small force-line-count text-wrap"
               :style="[{ '--lines': 1 }, { '--line-height': 1.6 }]"
             >
-              {{ title }}
+              <RouterLink
+                v-if="cardTo && !isPreSelect && !selected"
+                :to="cardTo"
+                class="link-underline"
+                @click.stop
+                >{{ title }}</RouterLink
+              >
+              <span v-else>{{ title }}</span>
             </div>
             <div
               class="text-body-large force-line-count text-pre-wrap mt-2"
@@ -126,12 +132,19 @@ import type { ItemCardEmits, ItemCardProps } from '@/types/ItemCard'
 import { vOnLongPress } from '@vueuse/components'
 import { usePrimaryInput } from '@/composables/device'
 import { useDisplay } from 'vuetify'
+import type { RouteLocationObject } from '@/types/route'
 
 const display = useDisplay()
 const { isTouchPrimary } = usePrimaryInput()
+const router = useRouter()
+
+function onCardClick(event: Event) {
+  if (isPreSelect.value || selected) emit('selection', !selected, event)
+  else if (cardTo) void router.push(cardTo)
+}
 
 function onCardLongPress() {
-  if (isTouchPrimary.value) emit('cardLongPress')
+  if (isTouchPrimary.value && !isPreSelect.value) emit('cardLongPress')
 }
 
 const {
@@ -143,6 +156,7 @@ const {
   quickActionIcon,
   quickActionProps = {},
   menuIcon,
+  cardTo,
 } = defineProps<
   ItemCardProps & {
     /**
@@ -182,6 +196,7 @@ const {
      */
     menuProps?: object
     progressPercent?: number
+    cardTo?: RouteLocationObject
   }
 >()
 
