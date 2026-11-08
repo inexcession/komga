@@ -3,10 +3,13 @@
     "defaultMessage": "Kullanıcı Arayüzü"
   },
   "+6YDzS": {
-    "defaultMessage": "Bilgi bulunamadı"
+    "defaultMessage": "Veri bulunamadı"
   },
   "+8++PW": {
     "defaultMessage": "Kütüphane oluşturuldu: {library}"
+  },
+  "+C/+3o": {
+    "defaultMessage": "Liste boş olamaz"
   },
   "+PNCoe": {
     "defaultMessage": "Alternatif başlık"
@@ -29,8 +32,17 @@
   "+r8FCS": {
     "defaultMessage": "Server dinlenme portu"
   },
+  "+sF9Fw": {
+    "defaultMessage": "Mevcut değerler"
+  },
+  "+sXZtI": {
+    "defaultMessage": "Kapat"
+  },
   "+y+9xL": {
     "defaultMessage": "Boyut sınırını aşan dosyalar: {filenames}"
+  },
+  "/4RRHN": {
+    "defaultMessage": "Liste boş olamaz"
   },
   "/5Gb4y": {
     "defaultMessage": "Sil"
@@ -92,6 +104,9 @@
   "0YG9GQ": {
     "defaultMessage": "Beni hatırla"
   },
+  "0c6DrH": {
+    "defaultMessage": "Başlangıç değerine geri yükle"
+  },
   "0eIJ3K": {
     "defaultMessage": "Manuel sıralama"
   },
@@ -130,6 +145,9 @@
   },
   "1VkZao": {
     "defaultMessage": "Daha fazla"
+  },
+  "1dgTdi": {
+    "defaultMessage": "Analiz et"
   },
   "1hsKmu": {
     "defaultMessage": "Karakter"
@@ -189,7 +207,7 @@
     "defaultMessage": "API Anahtarını Sil"
   },
   "3gimvl": {
-    "defaultMessage": "kütüphane adı"
+    "defaultMessage": "kütüphane menüsü"
   },
   "3lLmfX": {
     "defaultMessage": "Koleksiyon"
@@ -228,7 +246,7 @@
     "defaultMessage": "Emeği geçen herkes"
   },
   "4U6L0S": {
-    "defaultMessage": "Bağlantılar"
+    "defaultMessage": "Linkler"
   },
   "4X3RAp": {
     "defaultMessage": "{count, plural, one {# cilt} other {# ciltler} }"
@@ -243,7 +261,7 @@
     "defaultMessage": "Okunacak — {number}"
   },
   "4uqafX": {
-    "defaultMessage": "One-shot"
+    "defaultMessage": "Tek seferlik"
   },
   "4yDvPA": {
     "defaultMessage": "Filtreleri temizle"
@@ -278,8 +296,14 @@
   "5tbu8Y": {
     "defaultMessage": "Yinele"
   },
+  "5voJNm": {
+    "defaultMessage": "Kısıtlama yok"
+  },
   "5zPpyT": {
     "defaultMessage": "Yaş aralığı"
+  },
+  "69jd/r": {
+    "defaultMessage": "Okuma listesinden çıkar"
   },
   "6F1ebQ": {
     "defaultMessage": "HTTP Sunucusu"
@@ -295,6 +319,9 @@
   },
   "6WDISV": {
     "defaultMessage": "Sayfa bulunamadı"
+  },
+  "6cwDEs": {
+    "defaultMessage": "Koyu"
   },
   "6eAECF": {
     "defaultMessage": "Kütüphane"
@@ -357,7 +384,7 @@
     "defaultMessage": "Klasörden içe aktar"
   },
   "8P7Yn+": {
-    "defaultMessage": "Yaş aralığı"
+    "defaultMessage": "Yaş sınırı"
   },
   "8Yd/3a": {
     "defaultMessage": "Rol adı"
@@ -377,8 +404,14 @@
   "9/1/c7": {
     "defaultMessage": "Kitap kapağı oluştur"
   },
+  "90k6a7": {
+    "defaultMessage": "Koleksiyon en az bir seri içermelidir"
+  },
   "90yqRq": {
     "defaultMessage": "kütüphane ekle"
+  },
+  "98Q8V7": {
+    "defaultMessage": "Kaldır"
   },
   "9GaR82": {
     "defaultMessage": "Genel"
@@ -390,7 +423,7 @@
     "defaultMessage": "Başka bir klasörü taramayı deneyin"
   },
   "9XDmYO": {
-    "defaultMessage": "Kullanıcı Silme"
+    "defaultMessage": "Kullanıcıyı Sil"
   },
   "9aVhJC": {
     "defaultMessage": "CBZ"
@@ -533,6 +566,9 @@
   "DG4tYb": {
     "defaultMessage": "{count, plural, one {# cilt} other {# ciltler} }"
   },
+  "DK4PsD": {
+    "defaultMessage": "Kitap serileri"
+  },
   "DNVnmS": {
     "defaultMessage": "Klasör adı"
   },
@@ -581,14 +617,23 @@
   "EMhLEN": {
     "defaultMessage": "Dosyaları Taşı"
   },
+  "EOrAHc": {
+    "defaultMessage": "PDF"
+  },
   "EabQ38": {
     "defaultMessage": "Beni hatırla"
   },
   "EbhcQd": {
     "defaultMessage": "Detaylar"
   },
+  "EnHAAa": {
+    "defaultMessage": "PDF"
+  },
   "Epp7Fi": {
     "defaultMessage": "Etiketler"
+  },
+  "Er4D87": {
+    "defaultMessage": "Görsel"
   },
   "EzOmuX": {
     "defaultMessage": "Oluşturuldu"
@@ -632,13 +677,871 @@
   "GCwZB2": {
     "defaultMessage": "Kütüphane dosyalarını tara"
   },
+  "Gwmnm6": {
+    "defaultMessage": "Seri"
+  },
+  "GyRV+/": {
+    "defaultMessage": "Kitaplık Google Drive üzerinde barındırılıyorsa bunu etkinleştirmelisiniz"
+  },
+  "GySX8C": {
+    "defaultMessage": "Çöp kutusunu her taramadan sonra otomatik olarak boşalt"
+  },
+  "H+LXXE": {
+    "defaultMessage": "Bir kitaplığı sabitlemekten çıkarmak için buraya sürükleyin"
+  },
+  "H2B6uF": {
+    "defaultMessage": "Seri seçin"
+  },
+  "H4Kte4": {
+    "defaultMessage": "Başlık"
+  },
+  "HHvDPs": {
+    "defaultMessage": "e-Posta"
+  },
+  "HIKKsB": {
+    "defaultMessage": "Profil"
+  },
+  "HOBFqq": {
+    "defaultMessage": "hata"
+  },
+  "HZqgan": {
+    "defaultMessage": "Kapat"
+  },
+  "HaWCi3": {
+    "defaultMessage": "Ayarlar"
+  },
+  "IE0XzE": {
+    "defaultMessage": "Sil"
+  },
+  "II5EFN": {
+    "defaultMessage": "Çizerler"
+  },
+  "Icqm5y": {
+    "defaultMessage": "Sayfa numarası"
+  },
+  "IpvWiZ": {
+    "defaultMessage": "Sunucu"
+  },
+  "J+H9cC": {
+    "defaultMessage": "Dosyaları sil"
+  },
+  "J44THG": {
+    "defaultMessage": "Durum"
+  },
+  "J8l62K": {
+    "defaultMessage": "Ekle"
+  },
+  "J8rAqm": {
+    "defaultMessage": "Yayın yılı"
+  },
+  "JGOfZq": {
+    "defaultMessage": "Kullanıcılar"
+  },
+  "JHaKYw": {
+    "defaultMessage": "Hepsini seç"
+  },
+  "JNBONk": {
+    "defaultMessage": "Liste"
+  },
+  "JbF1nK": {
+    "defaultMessage": "{email} kullanıcısının şifresi değiştirildi"
+  },
+  "Jj4uO/": {
+    "defaultMessage": "Sayfa sayısı"
+  },
+  "Ju97UA": {
+    "defaultMessage": "Oku"
+  },
+  "JwBlXP": {
+    "defaultMessage": "Aç"
+  },
+  "K40g4r": {
+    "defaultMessage": "Kullanıcıyı düzenle"
+  },
+  "KBLD9U": {
+    "defaultMessage": "Yaş sınırı"
+  },
+  "Kie8HQ": {
+    "defaultMessage": "Kitap"
+  },
+  "Ku7NJ+": {
+    "defaultMessage": "Seri dosyaları bulunamadı"
+  },
+  "LBuB6T": {
+    "defaultMessage": "Okuma listesine ekle"
+  },
+  "LD5j8J": {
+    "defaultMessage": "İstenilen seriler"
+  },
+  "LFf8QB": {
+    "defaultMessage": "Sil"
+  },
+  "LKoz42": {
+    "defaultMessage": "Özet"
+  },
+  "MKs9N+": {
+    "defaultMessage": "Genel Görünüm"
+  },
+  "N9WFH4": {
+    "defaultMessage": "Kaydet"
+  },
+  "NKVL81": {
+    "defaultMessage": "Tek seferlik"
+  },
+  "NLiXdm": {
+    "defaultMessage": "Etiket"
+  },
+  "NN7kAK": {
+    "defaultMessage": "Zorunlu kılınan Kobo eşitlemesi : {apiKeyComment}"
+  },
+  "Nahedl": {
+    "defaultMessage": "Ekle"
+  },
+  "No9Upl": {
+    "defaultMessage": "Başlık"
+  },
+  "NruW40": {
+    "defaultMessage": "Yayıncı"
+  },
+  "NwK2Kv": {
+    "defaultMessage": "Etiket"
+  },
+  "O/3awV": {
+    "defaultMessage": "Analiz"
+  },
+  "O4Nnj5": {
+    "defaultMessage": "Kitap {number}"
+  },
+  "OLqBQc": {
+    "defaultMessage": "Yayıncı"
+  },
+  "OW1/zn": {
+    "defaultMessage": "Son aktivite yok"
+  },
+  "OxqfKF": {
+    "defaultMessage": "Derin tarama"
+  },
+  "Po0Z4Z": {
+    "defaultMessage": "Okuma listesi"
+  },
+  "Pp3+1S": {
+    "defaultMessage": "Durum"
+  },
+  "Q7tJAG": {
+    "defaultMessage": "Okuma listesi"
+  },
+  "QBQ5a/": {
+    "defaultMessage": "Başlık"
+  },
+  "QIr0z7": {
+    "defaultMessage": "e-Posta"
+  },
+  "Qz1UTX": {
+    "defaultMessage": "Kapat"
+  },
+  "ROFRn4": {
+    "defaultMessage": "Üret"
+  },
+  "RcbD73": {
+    "defaultMessage": "Kitap {number}"
+  },
+  "S1/qO0": {
+    "defaultMessage": "Koleksiyon"
+  },
+  "SIfmpC": {
+    "defaultMessage": "Seri seç"
+  },
+  "SZHxy4": {
+    "defaultMessage": "Kitap seç"
+  },
+  "SqZoei": {
+    "defaultMessage": "Seri seç"
+  },
+  "TPX4qo": {
+    "defaultMessage": "Etiketler"
+  },
+  "TTO9NT": {
+    "defaultMessage": "Özet"
+  },
+  "ThHjN4": {
+    "defaultMessage": "Seri"
+  },
+  "ToD0+o": {
+    "defaultMessage": "e-Posta"
+  },
+  "U3Uo3q": {
+    "defaultMessage": "Şifre"
+  },
+  "UFZ+PY": {
+    "defaultMessage": "Etiketler"
+  },
+  "UfbIyV": {
+    "defaultMessage": "Linkler"
+  },
+  "Uj479p": {
+    "defaultMessage": "Yayınlanma tarihi"
+  },
+  "Uuu6fQ": {
+    "defaultMessage": "Sonuç yok"
+  },
+  "VP+GhR": {
+    "defaultMessage": "Üret"
+  },
+  "VQ/hT4": {
+    "defaultMessage": "ISBN"
+  },
+  "VcueWO": {
+    "defaultMessage": "'SeriesGroup' öğesi kullanılacak"
+  },
+  "VeEnkD": {
+    "defaultMessage": "Linkler"
+  },
+  "Vpmsx0": {
+    "defaultMessage": "Kitap serileri"
+  },
+  "Vs7y3+": {
+    "defaultMessage": "Okuma listesine ekle"
+  },
+  "VvjZEl": {
+    "defaultMessage": "Hiç kitap bulunamadı"
+  },
+  "Vwpr+D": {
+    "defaultMessage": "Rastgele"
+  },
+  "W3BUf7": {
+    "defaultMessage": "Anladım"
+  },
+  "WADecv": {
+    "defaultMessage": "Yüklü"
+  },
+  "WLwQG8": {
+    "defaultMessage": "Henüz API anahtarı oluşturulmamış"
+  },
+  "WNY0pu": {
+    "defaultMessage": "Komga'nın güncel sürümü yüklü"
+  },
+  "WPxleH": {
+    "defaultMessage": "Kitap dosyaları silinecek<ul><li>Kitap medya dosyası diskten silinecek.</li><li>Kitaba ait yardımcı dosyalar (sidecar dosyaları) diskten silinecek.</li><li>Kitap; meta verileri ve okuma ilerleme durumuyla birlikte silinecek.</li></ul><b>Bu işlem geri alınamaz.</b>"
+  },
+  "WSTiWA": {
+    "defaultMessage": "Koleksiyona eklendi"
+  },
+  "WVblsI": {
+    "defaultMessage": "Sayfa sayısı"
+  },
+  "WY7aQf": {
+    "defaultMessage": "Kazanılan alan"
+  },
+  "WhasCZ": {
+    "defaultMessage": "Yeni şifre"
+  },
+  "Wi+k3O": {
+    "defaultMessage": "Ondalık sayılar kullanılabilir"
+  },
+  "Wivz5J": {
+    "defaultMessage": "Kapat"
+  },
+  "Wlzzv8": {
+    "defaultMessage": "İstenilen sayı"
+  },
+  "WyueEI": {
+    "defaultMessage": "Seri meta verilerini düzenle"
+  },
+  "X/Z8x+": {
+    "defaultMessage": "API anahtarınızı kopyaladığınızdan emin olun. Daha sonradan API anahtarını göremeyeceksiniz !"
+  },
+  "X47Js+": {
+    "defaultMessage": "Seri"
+  },
+  "X80giU": {
+    "defaultMessage": "Ekle"
+  },
+  "XCwAkR": {
+    "defaultMessage": "Aç"
+  },
+  "XDV3Si": {
+    "defaultMessage": "Daha fazla"
+  },
+  "XM8VQH": {
+    "defaultMessage": "Eylem"
+  },
+  "XR+P68": {
+    "defaultMessage": "Dil"
+  },
+  "XRbUyd": {
+    "defaultMessage": "Okuma durumu"
+  },
+  "XXr6pI": {
+    "defaultMessage": "Sayfa boyutu"
+  },
+  "Xbf2fj": {
+    "defaultMessage": "Dizin değiştirilme zamanını zorla ayarla"
+  },
+  "XnidLu": {
+    "defaultMessage": "Onaylamak için lütfen <b>{validateText}</b> yazın."
+  },
+  "Xx+ITC": {
+    "defaultMessage": "Faaliyetlerim"
+  },
+  "Y/fJj5": {
+    "defaultMessage": "Dosya boyutu"
+  },
+  "Y0cG3G": {
+    "defaultMessage": "API anahtarı bu sunucudan silinecektir.<ul><li>Bu API anahtarını kullanan tüm uygulamalar veya betikler, artık Komga API'sine erişemeyecektir.</li><li>Bu API anahtarına ilişkin kimlik doğrulama etkinlikleri kalıcı olarak silinecektir.</li></ul><b>Bu işlem geri alınamaz.</b>"
+  },
+  "Y6VlM9": {
+    "defaultMessage": "Okuma Listesi"
+  },
+  "Y7Y2T0": {
+    "defaultMessage": "Oku"
+  },
+  "Y8SsFO": {
+    "defaultMessage": "Oku"
+  },
+  "ZGppaw": {
+    "defaultMessage": "Seri"
+  },
+  "ZPuFVu": {
+    "defaultMessage": "Genel"
+  },
+  "ZZmdmI": {
+    "defaultMessage": "{pagesCount} sayfa"
+  },
+  "Zh8AOV": {
+    "defaultMessage": "Kullanıcıyı Düzenle"
+  },
+  "ZnnG58": {
+    "defaultMessage": "Poster"
+  },
+  "Zzqa/A": {
+    "defaultMessage": "Koleksiyondan çıkar"
+  },
+  "a5MYiP": {
+    "defaultMessage": "Posterler"
+  },
+  "aDFZOW": {
+    "defaultMessage": "e-Posta"
+  },
+  "aHyrmS": {
+    "defaultMessage": "Sil"
+  },
+  "aOiU5f": {
+    "defaultMessage": "Güncellenen kütüphane: {library}"
+  },
+  "aR6KDt": {
+    "defaultMessage": "Dil"
+  },
+  "aU1qcP": {
+    "defaultMessage": "Sil"
+  },
+  "aeEb6w": {
+    "defaultMessage": "Değişiklikleri iptal et veya son silme işlemini geri al"
+  },
+  "afXGQS": {
+    "defaultMessage": "Kök dizin"
+  },
+  "app.error.ERR_1036": {
+    "defaultMessage": "EPUB Önemli Noktaları alınırken hata oluştu"
+  },
+  "app.error.ERR_1037": {
+    "defaultMessage": "EPUB sayfa listesi alınırken hata oluştu"
+  },
+  "app.error.ERR_1038": {
+    "defaultMessage": "EPUB divina sayfaları alınırken hata oluştu"
+  },
+  "app.error.ERR_1039": {
+    "defaultMessage": "EPUB konumları alınırken hata oluştu"
+  },
+  "app.user-create-dialog.all_libraries": {
+    "defaultMessage": "Tüm kütüphaneler"
+  },
+  "ayrmyn": {
+    "defaultMessage": "Başlığa göre sırala"
+  },
+  "bCFD9B": {
+    "defaultMessage": "Sayfalandırılmış"
+  },
+  "bDNZqj": {
+    "defaultMessage": "Okuma listesini düzenle"
+  },
+  "bFoCHJ": {
+    "defaultMessage": "Hedef dosya adı"
+  },
+  "bOUy3X": {
+    "defaultMessage": "Kitap"
+  },
+  "bSoeY6": {
+    "defaultMessage": "Hedef adı"
+  },
   "bWiqyw": {
     "defaultMessage": "Varlık edı"
+  },
+  "bzn96A": {
+    "defaultMessage": "Kütüphane oluştur"
+  },
+  "c+hx0g": {
+    "defaultMessage": "Kullanıcılar"
+  },
+  "cAu/I6": {
+    "defaultMessage": "Eş Sayfalar"
+  },
+  "cIM3eJ": {
+    "defaultMessage": "Sürdür"
+  },
+  "cM9FuW": {
+    "defaultMessage": "Seri seçin"
+  },
+  "cfWux+": {
+    "defaultMessage": "Koleksiyon adı"
+  },
+  "cyQk6S": {
+    "defaultMessage": "Koleksiyonlar"
+  },
+  "d2J/J/": {
+    "defaultMessage": "Seç"
+  },
+  "dHyAgE": {
+    "defaultMessage": "Şifre Değiştir"
+  },
+  "dK/kHO": {
+    "defaultMessage": "Medya yorumu"
+  },
+  "dN5GoW": {
+    "defaultMessage": "Kitap"
+  },
+  "ddpX9L": {
+    "defaultMessage": "Genel"
+  },
+  "dipMGb": {
+    "defaultMessage": "Oluştur"
+  },
+  "enum.MediaProfile.EPUB": {
+    "defaultMessage": "Epub"
+  },
+  "enum.MediaProfile.PDF": {
+    "defaultMessage": "Pdf"
+  },
+  "enum.MediaStatus.ERROR": {
+    "defaultMessage": "Hata"
+  },
+  "enum.OverviewSection.keep_reading": {
+    "defaultMessage": "Okumaya Devam Edin"
+  },
+  "enum.OverviewSection.on_deck": {
+    "defaultMessage": "Okumaya Başlayın"
+  },
+  "enum.OverviewSection.recently_added_books": {
+    "defaultMessage": "Yeni Eklenen Kitaplar"
+  },
+  "enum.OverviewSection.recently_added_series": {
+    "defaultMessage": "Yeni Eklenen Seriler"
+  },
+  "enum.OverviewSection.recently_read_books": {
+    "defaultMessage": "Son Okunan Kitaplar"
+  },
+  "enum.OverviewSection.recently_released_books": {
+    "defaultMessage": "Son Yayınlanan Kitaplar"
+  },
+  "enum.OverviewSection.recently_updated_series": {
+    "defaultMessage": "Son Güncellenen Seriler"
+  },
+  "enum.ReadStatus.IN_PROGRESS": {
+    "defaultMessage": "Okunuyor"
+  },
+  "enum.ReadStatus.READ": {
+    "defaultMessage": "Oku"
+  },
+  "enum.ReadStatus.UNREAD": {
+    "defaultMessage": "Okunmamış"
+  },
+  "enum.ReadingDirection.LEFT_TO_RIGHT": {
+    "defaultMessage": "Soldan sağa"
+  },
+  "enum.ReadingDirection.RIGHT_TO_LEFT": {
+    "defaultMessage": "Sağdan sola"
+  },
+  "enum.ReadingDirection.VERTICAL": {
+    "defaultMessage": "Dikey"
+  },
+  "enum.ReadingDirection.WEBTOON": {
+    "defaultMessage": "Webtoon"
+  },
+  "enum.ScanInterval.DAILY": {
+    "defaultMessage": "Günlük"
+  },
+  "enum.ScanInterval.DISABLED": {
+    "defaultMessage": "Devre Dışı"
+  },
+  "enum.ScanInterval.EVERY_12H": {
+    "defaultMessage": "Her 12 saatte bir"
+  },
+  "enum.ScanInterval.EVERY_6H": {
+    "defaultMessage": "Her 6 saatte bir"
+  },
+  "enum.ScanInterval.HOURLY": {
+    "defaultMessage": "Saatlik"
+  },
+  "enum.ScanInterval.WEEKLY": {
+    "defaultMessage": "Haftalık"
+  },
+  "enum.SeriesCover.FIRST": {
+    "defaultMessage": "İlk"
+  },
+  "enum.SeriesCover.FIRST_UNREAD_OR_FIRST": {
+    "defaultMessage": "İlk okunmamış, aksi takdirde ilk"
+  },
+  "enum.SeriesCover.FIRST_UNREAD_OR_LAST": {
+    "defaultMessage": "İlk okunmamış, aksi takdirde son"
+  },
+  "enum.SeriesCover.LAST": {
+    "defaultMessage": "Sonuncu"
+  },
+  "enum.SeriesStatus.ABANDONED": {
+    "defaultMessage": "Terk edilmiş"
+  },
+  "enum.SeriesStatus.ENDED": {
+    "defaultMessage": "Sonlanmış"
+  },
+  "enum.SeriesStatus.HIATUS": {
+    "defaultMessage": "Ara verilmiş"
+  },
+  "enum.SeriesStatus.ONGOING": {
+    "defaultMessage": "Devam ediyor"
+  },
+  "enum.ThumbnailSize.DEFAULT": {
+    "defaultMessage": "Varsayılan (300px)"
+  },
+  "enum.ThumbnailSize.LARGE": {
+    "defaultMessage": "Büyük (900px)"
+  },
+  "enum.ThumbnailSize.MEDIUM": {
+    "defaultMessage": "Ortalama (600px)"
+  },
+  "enum.ThumbnailSize.XLARGE": {
+    "defaultMessage": "Ekstra Büyük (1200px)"
+  },
+  "exrB0E": {
+    "defaultMessage": "Genel"
+  },
+  "fQIepD": {
+    "defaultMessage": "Kitaplar"
+  },
+  "fbEqBB": {
+    "defaultMessage": "Linkler"
+  },
+  "foSDIW": {
+    "defaultMessage": "Derin tarama"
+  },
+  "gNiEAF": {
+    "defaultMessage": "Yorum"
+  },
+  "ggaOkE": {
+    "defaultMessage": "Veri bulunamadı"
+  },
+  "gojrIJ": {
+    "defaultMessage": "Seri seç"
+  },
+  "gtEH1R": {
+    "defaultMessage": "Genel"
+  },
+  "gxZjIe": {
+    "defaultMessage": "Eylem"
+  },
+  "h6C8/l": {
+    "defaultMessage": "Genel"
+  },
+  "hBanlz": {
+    "defaultMessage": "Tür"
+  },
+  "hGFogR": {
+    "defaultMessage": "Paylaşım etiketi"
+  },
+  "hJEc5M": {
+    "defaultMessage": "kütüphaneler menüsü"
+  },
+  "hPo41m": {
+    "defaultMessage": "Veri bulunamadı"
+  },
+  "hV3EW+": {
+    "defaultMessage": "Derin tarama"
+  },
+  "hgiBeR": {
+    "defaultMessage": "En son etkinlik"
+  },
+  "i+kSy9": {
+    "defaultMessage": "Yenile"
+  },
+  "i6UTPu": {
+    "defaultMessage": "Alanın kilidini aç"
+  },
+  "iQKrku": {
+    "defaultMessage": "EPUB"
+  },
+  "iVYrha": {
+    "defaultMessage": "Genel"
+  },
+  "jN3N1Q": {
+    "defaultMessage": "Analiz et"
+  },
+  "k9X/05": {
+    "defaultMessage": "Poster"
+  },
+  "kGC6Gu": {
+    "defaultMessage": "Son aktivite yok"
+  },
+  "kHmCVM": {
+    "defaultMessage": "Kitaplığı tara"
+  },
+  "kMw47z": {
+    "defaultMessage": "Okuma listesinden çıkar"
+  },
+  "kYDPt1": {
+    "defaultMessage": "Dosya adı"
+  },
+  "knm6Z+": {
+    "defaultMessage": "Durum"
+  },
+  "kqV7EJ": {
+    "defaultMessage": "Boş okuma listelerini taramadan sonra sil"
+  },
+  "l7mpQK": {
+    "defaultMessage": "Oku"
+  },
+  "lDnmZD": {
+    "defaultMessage": "Güncellemeler"
   },
   "lFWPpj": {
     "defaultMessage": "Varlık ekle"
   },
+  "lPZ5hy": {
+    "defaultMessage": "Kapat"
+  },
+  "laWvMU": {
+    "defaultMessage": "Tamam"
+  },
+  "ldAVd7": {
+    "defaultMessage": "Okuma listesi"
+  },
+  "lt7Tru": {
+    "defaultMessage": "Seri"
+  },
+  "lu0qxx": {
+    "defaultMessage": "Kaldır"
+  },
+  "lvCpSX": {
+    "defaultMessage": "Eylemler"
+  },
+  "lzHPYD": {
+    "defaultMessage": "Başka bir şey aramayı deneyin"
+  },
+  "m+yz6Z": {
+    "defaultMessage": "Sayfa numarası"
+  },
+  "m9h2wk": {
+    "defaultMessage": "Küçük resim"
+  },
+  "n4w2CE": {
+    "defaultMessage": "Düzenle"
+  },
+  "nWgSSS": {
+    "defaultMessage": "Koleksiyon"
+  },
+  "nXEvYQ": {
+    "defaultMessage": "Kaydet ve devam et"
+  },
+  "nXWSTf": {
+    "defaultMessage": "İsim"
+  },
+  "noaGSP": {
+    "defaultMessage": "Kitap seç"
+  },
+  "nuoJ1n": {
+    "defaultMessage": "Kütüphane oluştur"
+  },
+  "o+A10T": {
+    "defaultMessage": "Şifre"
+  },
+  "o+h0F+": {
+    "defaultMessage": "Dosya adı"
+  },
+  "o1XnPU": {
+    "defaultMessage": "API Anahtarı"
+  },
+  "o8WeX3": {
+    "defaultMessage": "Sil"
+  },
+  "oB2hG3": {
+    "defaultMessage": "Paylaşım"
+  },
+  "oFOkWZ": {
+    "defaultMessage": "API Anahtarları"
+  },
+  "oOtDhj": {
+    "defaultMessage": "Panoya kopyala"
+  },
+  "oyeyK/": {
+    "defaultMessage": "Küçük resim"
+  },
+  "pCBNlA": {
+    "defaultMessage": "Kütüphane"
+  },
+  "pENCUD": {
+    "defaultMessage": "İptal"
+  },
+  "pHdVzh": {
+    "defaultMessage": "Boş koleksiyonları taramadan sonra sil"
+  },
+  "pK72Vk": {
+    "defaultMessage": "Önceki"
+  },
+  "pR3VdQ": {
+    "defaultMessage": "Seri"
+  },
+  "pTsA/M": {
+    "defaultMessage": "Kitaplar"
+  },
+  "phzvRy": {
+    "defaultMessage": "Kütüphane"
+  },
+  "pvD6TS": {
+    "defaultMessage": "Karşılaştır"
+  },
+  "q6fppQ": {
+    "defaultMessage": "Sil"
+  },
+  "qq92EF": {
+    "defaultMessage": "Alanın kilidini aç"
+  },
+  "r/G7j0": {
+    "defaultMessage": "Sayı"
+  },
+  "r48oBl": {
+    "defaultMessage": "Okuma listesini düzenle"
+  },
+  "r5O+/d": {
+    "defaultMessage": "Tür"
+  },
+  "r6CqyT": {
+    "defaultMessage": "Kullanıcıyı sil"
+  },
+  "r7xCeA": {
+    "defaultMessage": "Şifre değiştir"
+  },
+  "rDBhmQ": {
+    "defaultMessage": "Sil"
+  },
+  "rKyTwd": {
+    "defaultMessage": "Eylemler"
+  },
+  "rrF/Z2": {
+    "defaultMessage": "İsim"
+  },
+  "rw5pw5": {
+    "defaultMessage": "Görsel"
+  },
+  "s/A/wz": {
+    "defaultMessage": "ISBN"
+  },
+  "s1nzhU": {
+    "defaultMessage": "Kütüphane adı"
+  },
+  "sGsWvI": {
+    "defaultMessage": "Şifre değiştir"
+  },
   "sutqn3": {
     "defaultMessage": "Özel varlık..."
+  },
+  "t0Tkmy": {
+    "defaultMessage": "Kobo ile eşleşmeye zorla"
+  },
+  "tA65z3": {
+    "defaultMessage": "Sayfa numarası"
+  },
+  "tLFumw": {
+    "defaultMessage": "Yaş sınırı"
+  },
+  "tc55Tn": {
+    "defaultMessage": "Koleksiyondan çıkar"
+  },
+  "tm9g8D": {
+    "defaultMessage": "Tamam"
+  },
+  "toP54Z": {
+    "defaultMessage": "Hata"
+  },
+  "tqrq7S": {
+    "defaultMessage": "Değişiklikleri iptal et veya son silme işlemini geri al"
+  },
+  "uGC9fD": {
+    "defaultMessage": "Seçenekler"
+  },
+  "uOPuSH": {
+    "defaultMessage": "Tür"
+  },
+  "uTuk/9": {
+    "defaultMessage": "Dosya boyutu"
+  },
+  "uW+6XG": {
+    "defaultMessage": "Özet"
+  },
+  "uwFE74": {
+    "defaultMessage": "Tara"
+  },
+  "v3beFf": {
+    "defaultMessage": "Geçerli bir BCP 47 dil kodu olmalıdır"
+  },
+  "vTqlcG": {
+    "defaultMessage": "Sil"
+  },
+  "vXhkpo": {
+    "defaultMessage": "Dosyayı sil"
+  },
+  "vcA12h": {
+    "defaultMessage": "Dil"
+  },
+  "viKuRl": {
+    "defaultMessage": "Poster"
+  },
+  "wESuod": {
+    "defaultMessage": "Okunmamış"
+  },
+  "wXGljO": {
+    "defaultMessage": "Sürdür"
+  },
+  "wbH42A": {
+    "defaultMessage": "Kullanılamıyor"
+  },
+  "wk+b55": {
+    "defaultMessage": "Düzenle"
+  },
+  "wwiazg": {
+    "defaultMessage": "Panoda geçerli bir görsel bulunamadı"
+  },
+  "x1MEvu": {
+    "defaultMessage": "Yayınlanma tarihi"
+  },
+  "xjHL5K": {
+    "defaultMessage": "Poster"
+  },
+  "xpBvz8": {
+    "defaultMessage": "Yayın yılı"
+  },
+  "y1Fk/a": {
+    "defaultMessage": "Sonuç yok"
+  },
+  "y1P/K4": {
+    "defaultMessage": "En son etkinlik"
+  },
+  "yDWzUi": {
+    "defaultMessage": "API Anahtarları"
+  },
+  "yPygXa": {
+    "defaultMessage": "Oluştur"
+  },
+  "zfQq+w": {
+    "defaultMessage": "e-Posta"
+  },
+  "zqAxRE": {
+    "defaultMessage": "Kitap"
   }
 }
